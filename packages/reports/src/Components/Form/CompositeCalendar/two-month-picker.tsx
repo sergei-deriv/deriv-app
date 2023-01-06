@@ -1,63 +1,86 @@
-import PropTypes from 'prop-types';
 import moment from 'moment';
 import React from 'react';
 import { Calendar } from '@deriv/components';
 import { addMonths, diffInMonths, epochToMoment, subMonths, toMoment } from '@deriv/shared';
 
-const TwoMonthPicker = React.memo(({ onChange, isPeriodDisabled, value }) => {
-    const [left_pane_date, setLeftPaneDate] = React.useState(subMonths(value, 1).unix());
+type TTwoMonthPicker = {
+    onChange: (date: moment.MomentInput) => void;
+    isPeriodDisabled: (date: moment.MomentInput) => boolean;
+    value: number;
+};
+
+const TwoMonthPicker = React.memo(({ onChange, isPeriodDisabled, value }: TTwoMonthPicker) => {
+    const [left_pane_date, setLeftPaneDate] = React.useState(
+        subMonths(value ? new Date(value * 1000).toISOString() : '', 1).unix()
+    );
     const [right_pane_date, setRightPaneDate] = React.useState(value);
 
-    const navigateFrom = e => {
-        setLeftPaneDate(e.unix());
-        setRightPaneDate(addMonths(e, 1).unix());
+    /**
+     * Navigate from date
+     *
+     * @param {moment.Moment} date
+     * @returns {void}
+     */
+    const navigateFrom = (date: moment.Moment): void => {
+        setLeftPaneDate(date.unix());
+        setRightPaneDate(addMonths(date.toISOString(), 1).unix());
+    };
+
+    /**
+     * Navigate to date
+     *
+     * @param {moment.Moment} date
+     * @returns {void}
+     */
+    const navigateTo = (date: moment.Moment): void => {
+        setLeftPaneDate(subMonths(date.toISOString(), 1).unix());
+        setRightPaneDate(toMoment(date).unix());
     };
 
     /**
      * Only allow previous months to be available to navigate. Disable other periods
      *
-     * @param date
-     * @param range
+     * @param {moment.Moment} date
+     * @param {Extract<moment.DurationInputArg2, 'month'>} range
      * @returns {boolean}
      */
-    const validateFromArrows = (date, range) => {
-        return range === 'year' || diffInMonths(epochToMoment(left_pane_date), date) !== -1;
-    };
-
-    /**
-     * Validate values to be date_from < date_to
-     */
-    const shouldDisableDate = date => {
-        return isPeriodDisabled(date.unix());
+    const validateFromArrows = (date: moment.Moment, range: Extract<moment.DurationInputArg2, 'month'>): boolean => {
+        // return range === 'year' || diffInMonths(epochToMoment(left_pane_date), date) !== -1;
+        return diffInMonths(epochToMoment(left_pane_date), date) !== -1;
     };
 
     /**
      * Only allow next month to be available to navigate (unless next month is in the future).
      * Disable other periods
      *
-     * @param date
-     * @param range
+     * @param {moment.Moment} date
+     * @param {Extract<moment.DurationInputArg2, 'month'>} range
      * @returns {boolean}
      */
-    const validateToArrows = (date, range) => {
-        if (range === 'year') return true; // disallow year arrows
+    const validateToArrows = (date: moment.Moment, range: Extract<moment.DurationInputArg2, 'month'>): boolean => {
+        // if (range === 'year') return true; // disallow year arrows
         const r_date = epochToMoment(right_pane_date).startOf('month');
         if (diffInMonths(toMoment().startOf('month'), r_date) === 0) return true; // future months are disallowed
         return diffInMonths(r_date, date) !== 1;
     };
 
-    const jumpToCurrentMonth = () => {
+    /**
+     * Validate values to be date_from < date_to
+     *
+     * @param {moment.Moment} date
+     * @return {boolean}
+     */
+    const shouldDisableDate = (date: moment.Moment): boolean => {
+        return isPeriodDisabled(date.unix());
+    };
+
+    const jumpToCurrentMonth = (): void => {
         const current_month = toMoment().endOf('month').unix();
         setLeftPaneDate(epochToMoment(current_month).endOf('month').subtract(1, 'month').unix());
         setRightPaneDate(current_month);
     };
 
-    const navigateTo = e => {
-        setLeftPaneDate(subMonths(e, 1).unix());
-        setRightPaneDate(toMoment(e).unix());
-    };
-
-    const updateSelectedDate = e => {
+    const updateSelectedDate = (e: React.MouseEvent<HTMLElement>): void => {
         onChange(moment.utc(e.currentTarget.dataset.date, 'YYYY-MM-DD').unix());
     };
 
@@ -108,9 +131,4 @@ const TwoMonthPicker = React.memo(({ onChange, isPeriodDisabled, value }) => {
 
 TwoMonthPicker.displayName = 'TwoMonthPicker';
 
-TwoMonthPicker.propTypes = {
-    isPeriodDisabled: PropTypes.func,
-    onChange: PropTypes.func,
-    value: PropTypes.number,
-};
 export default TwoMonthPicker;

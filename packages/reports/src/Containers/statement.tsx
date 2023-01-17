@@ -12,7 +12,7 @@ import AccountStatistics, { TAccountStatistics } from '../Components/account-sta
 import FilterComponent from '../Components/filter-component.jsx';
 import { ReportsMeta } from '../Components/reports-meta';
 import EmptyTradeHistoryMessage from '../Components/empty-trade-history-message';
-import RootStore from 'Stores/index';
+import type { TStores } from '@deriv/stores';
 
 type TGetStatementTableColumnsTemplate = ReturnType<typeof getStatementTableColumnsTemplate>;
 type TColIndex = 'icon' | 'refid' | 'currency' | 'date' | 'action_type' | 'amount' | 'balance';
@@ -300,7 +300,7 @@ const Statement = ({
 };
 
 export default withRouter(
-    connect(({ modules, client }: RootStore) => ({
+    connect(({ modules, client }: TStores) => ({
         action_type: modules.statement.action_type,
         account_statistics: modules.statement.account_statistics,
         currency: client.currency,

@@ -5,30 +5,30 @@ import Tab from './tab';
 import { useConstructor } from '../../hooks';
 import ThemedScrollbars from '../themed-scrollbars/themed-scrollbars';
 
-type TTabsProps = RouteComponentProps & {
-    active_icon_color?: string;
-    active_index?: number;
-    background_color?: string;
-    bottom?: boolean;
-    center?: boolean;
-    children: React.ReactNode & React.ReactNode[];
-    className?: string;
-    fit_content?: boolean;
-    has_active_line?: boolean;
-    has_bottom_line?: boolean;
-    header_fit_content: boolean;
-    history: History;
-    icon_color?: string;
-    icon_size?: number;
-    is_100vw?: boolean;
-    is_full_width?: boolean;
-    is_overflow_hidden?: boolean;
-    is_scrollable?: boolean;
-    onTabItemClick: (active_tab_index: number) => void;
-    should_update_hash?: boolean;
-    single_tab_has_no_label?: boolean;
-    top: boolean;
-};
+type TTabsProps = RouteComponentProps &
+    React.PropsWithChildren<{
+        active_icon_color?: string;
+        active_index?: number;
+        background_color?: string;
+        bottom?: boolean;
+        center?: boolean;
+        className?: string;
+        fit_content?: boolean;
+        has_active_line?: boolean;
+        has_bottom_line?: boolean;
+        header_fit_content: boolean;
+        history: History;
+        icon_color?: string;
+        icon_size?: number;
+        is_100vw?: boolean;
+        is_full_width?: boolean;
+        is_overflow_hidden?: boolean;
+        is_scrollable?: boolean;
+        onTabItemClick: (active_tab_index: number) => void;
+        should_update_hash?: boolean;
+        single_tab_has_no_label?: boolean;
+        top: boolean;
+    }>;
 
 const Tabs = ({
     active_icon_color,

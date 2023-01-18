@@ -510,6 +510,19 @@ const OpenPositions = ({
                     onTabItemClick={setActiveTabIndex}
                     top
                     header_fit_content={!isMobile()}
+                    bottom={false}
+                    active_icon_color={''}
+                    background_color={''}
+                    center={false}
+                    fit_content={false}
+                    icon_color={''}
+                    icon_size={0}
+                    is_100vw={false}
+                    is_full_width={false}
+                    is_overflow_hidden={false}
+                    is_scrollable={false}
+                    should_update_hash={false}
+                    single_tab_has_no_label={false}
                 >
                     <div aria-label={localize('Options')}>
                         <OpenPositionsTable

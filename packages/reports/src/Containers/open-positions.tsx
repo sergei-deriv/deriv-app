@@ -30,13 +30,13 @@ import {
     getOpenPositionsColumnsTemplate,
     getMultiplierOpenPositionsColumnsTemplate,
 } from 'Constants/data-table-constants';
-import PlaceholderComponent from '../Components/placeholder-component.jsx';
+import PlaceholderComponent from '../Components/placeholder-component';
 import { getCardLabels } from '_common/contract';
 import { connect } from 'Stores/connect';
-import { TRangeFloatZeroToOne } from '@deriv/components/src/components/progress-bar/progress-bar';
 import type { TRootStore } from 'Stores/index';
 import { TContractInfo } from '@deriv/shared/src/utils/contract/contract-types';
 
+type TRangeFloatZeroToOne = React.ComponentProps<typeof ProgressBar>['value'];
 type TFormatPortfolioPosition = ReturnType<typeof formatPortfolioPosition>;
 type TGetMultiplierOpenPositionsColumnsTemplate = ReturnType<typeof getMultiplierOpenPositionsColumnsTemplate>;
 type TGetOpenPositionsColumnsTemplate = ReturnType<typeof getOpenPositionsColumnsTemplate>;
@@ -197,9 +197,10 @@ const MobileRowRenderer = ({
     const { contract_info, contract_update, type, is_sell_requested } = row;
     const { currency, status, date_expiry, date_start } = contract_info;
     const duration_type = getContractDurationType(contract_info.longcode);
-    const progress_value = (getTimePercentage(server_time, date_start, date_expiry) / 100) as TRangeFloatZeroToOne;
+    const progress_value = (getTimePercentage(server_time, date_start ?? 0, date_expiry ?? 0) /
+        100) as TRangeFloatZeroToOne;
 
-    if (isMultiplierContract(type)) {
+    if (isMultiplierContract(type ?? '')) {
         return (
             <PositionsDrawerCard
                 contract_info={contract_info}
@@ -356,11 +357,15 @@ const getOpenPositionsTotals = (
         let purchase = 0;
 
         active_positions_filtered.forEach(portfolio_pos => {
-            buy_price += +portfolio_pos.contract_info.buy_price;
-            bid_price += +portfolio_pos.contract_info.bid_price;
-            purchase += +portfolio_pos.purchase;
+            buy_price += Number(portfolio_pos.contract_info.buy_price);
+            bid_price += Number(portfolio_pos.contract_info.bid_price);
+            purchase += Number(portfolio_pos.purchase);
             if (portfolio_pos.contract_info) {
-                profit += getTotalProfit(portfolio_pos.contract_info);
+                const prices = {
+                    bid_price: portfolio_pos.contract_info.bid_price ?? 0,
+                    buy_price: portfolio_pos.contract_info.buy_price ?? 0,
+                };
+                profit += getTotalProfit(prices);
 
                 if (portfolio_pos.contract_info.cancellation) {
                     ask_price += portfolio_pos.contract_info.cancellation.ask_price || 0;
@@ -390,9 +395,9 @@ const getOpenPositionsTotals = (
 
         active_positions_filtered?.forEach(portfolio_pos => {
             indicative += +portfolio_pos.indicative;
-            purchase += +portfolio_pos.purchase;
-            profit_loss += portfolio_pos.profit_loss;
-            payout += portfolio_pos.payout;
+            purchase += Number(portfolio_pos.purchase);
+            profit_loss += Number(portfolio_pos.profit_loss);
+            payout += Number(portfolio_pos.payout);
         });
         totals = {
             indicative,
@@ -443,7 +448,9 @@ const OpenPositions = ({
 
     const checkForMultiplierContract = (prev_active_positions: TFormatPortfolioPosition[] = []) => {
         if (!has_multiplier_contract && active_positions !== prev_active_positions) {
-            setMultiplierContract(active_positions.some(p => isMultiplierContract(p.contract_info?.contract_type)));
+            setMultiplierContract(
+                active_positions.some(p => isMultiplierContract(p.contract_info?.contract_type ?? ''))
+            );
         }
     };
 
@@ -455,8 +462,8 @@ const OpenPositions = ({
     const active_positions_filtered = active_positions?.filter(p => {
         if (p.contract_info) {
             return is_multiplier_selected
-                ? isMultiplierContract(p.contract_info.contract_type)
-                : !isMultiplierContract(p.contract_info.contract_type);
+                ? isMultiplierContract(p.contract_info.contract_type ?? '')
+                : !isMultiplierContract(p.contract_info.contract_type ?? '');
         }
         return true;
     });

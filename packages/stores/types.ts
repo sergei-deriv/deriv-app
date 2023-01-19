@@ -1,7 +1,6 @@
-import { TPortfolioPos } from '@deriv/shared';
-import type { GetAccountStatus, Authorize, DetailsOfEachMT5Loginid } from '@deriv/api-types';
+import moment from 'moment';
+import type { GetAccountStatus, Authorize, DetailsOfEachMT5Loginid, ProposalOpenContract } from '@deriv/api-types';
 import type { RouteComponentProps } from 'react-router';
-import { TContractInfo } from '../shared/src/utils/contract/contract-types';
 
 type TAccount = NonNullable<Authorize['account_list']>[0];
 
@@ -109,10 +108,10 @@ type TUiStore = {
 };
 
 type TPortfolioStore = {
-    getContractById: (id: number) => TContractInfo;
-    active_positions: TPortfolioPos[];
+    getContractById: (id: number) => ProposalOpenContract;
+    active_positions: ProposalOpenContract[];
     error: TCommonStoreError;
-    getPositionById: (id: number) => TPortfolioPos;
+    getPositionById: (id: number) => ProposalOpenContract;
     is_loading: boolean;
     is_multiplier: boolean;
     onClickCancel: () => void;
@@ -123,7 +122,7 @@ type TPortfolioStore = {
 };
 
 type TContractStore = {
-    getContractById: (id: number) => TContractInfo;
+    getContractById: (id: number) => ProposalOpenContract;
 };
 
 export type TRootStore = {

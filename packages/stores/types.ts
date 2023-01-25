@@ -1,4 +1,4 @@
-import moment from 'moment';
+import type { Moment } from 'moment';
 import type { GetAccountStatus, Authorize, DetailsOfEachMT5Loginid, ProposalOpenContract } from '@deriv/api-types';
 import type { RouteComponentProps } from 'react-router';
 
@@ -86,7 +86,7 @@ type TCommonStore = {
     platform: string;
     routeBackInApp: (history: Pick<RouteComponentProps, 'history'>, additional_platform_path?: string[]) => void;
     routeTo: (pathname: string) => void;
-    server_time: moment.Moment;
+    server_time: Moment;
 };
 
 type TUiStore = {

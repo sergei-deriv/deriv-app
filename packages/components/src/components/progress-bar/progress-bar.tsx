@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React from 'react';
 import Text from '../text';
 
-// ! Todo: Create a utility type for getting a range of float number. ex: FloatRange<0, 1>
+// Todo: Create a utility type for getting a range of float number. ex: FloatRange<0, 1>
 type TRangeFloatZeroToOne = 0 | 0.1 | 0.2 | 0.3 | 0.4 | 0.5 | 0.6 | 0.7 | 0.8 | 0.9 | 1;
 
 type TProgressBarProps = {

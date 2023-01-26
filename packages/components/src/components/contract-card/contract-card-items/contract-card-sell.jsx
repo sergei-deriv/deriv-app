@@ -14,7 +14,7 @@ const ContractCardSell = ({ contract_info, getCardLabels, is_sell_requested, onC
         ev.preventDefault();
     };
 
-    if (!should_show_sell) return <React.Fragment />;
+    if (!should_show_sell) return null;
     if (!is_valid_to_sell)
         return <div className='dc-contract-card__no-resale-msg'>{getCardLabels().RESALE_NOT_OFFERED}</div>;
     return (

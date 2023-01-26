@@ -3,11 +3,19 @@ import { Switch } from 'react-router-dom';
 import { Localize } from '@deriv/translations';
 import getRoutesConfig from '../../Constants/routes-config';
 import RouteWithSubRoutes from './route-with-sub-routes';
+import type { TStores } from '@deriv/stores';
+
+// this type already described in ../../Containers/routes.tsx, but PR is not merged yet
+// TODO: export this type during refactor
+type TPassthrough = {
+    root_store: TStores;
+    WS: Record<string, any>;
+};
 
 type TBinaryRoutes = {
     is_logged_in: boolean;
     is_logging_in: boolean;
-    passthrough: Record<string, any>;
+    passthrough: TPassthrough;
 };
 
 const BinaryRoutes = (props: TBinaryRoutes) => {
@@ -20,8 +28,8 @@ const BinaryRoutes = (props: TBinaryRoutes) => {
             }
         >
             <Switch>
-                {getRoutesConfig().map(route => (
-                    <RouteWithSubRoutes key={route.path} {...route} {...props} />
+                {getRoutesConfig().map((route, idx) => (
+                    <RouteWithSubRoutes key={route.path ?? idx} {...route} {...props} />
                 ))}
             </Switch>
         </React.Suspense>

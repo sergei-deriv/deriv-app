@@ -12,7 +12,7 @@ type TPassthrough = {
     WS: Record<string, any>;
 };
 
-type TBinaryRoutes = {
+export type TBinaryRoutes = {
     is_logged_in: boolean;
     is_logging_in: boolean;
     passthrough: TPassthrough;

@@ -3,22 +3,7 @@ import { Redirect, Route } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
 import { redirectToLogin, isEmptyObject, routes, removeBranchName, default_title } from '@deriv/shared';
 import { getLanguage } from '@deriv/translations';
-import { TRoute } from 'Constants/routes-config';
-import type { TStores } from '@deriv/stores';
-
-// this type already described in ../../Containers/routes.tsx, but previous PR is not merged yet
-// TODO: export this type during refactor
-type TPassthrough = {
-    root_store: TStores;
-    WS: Record<string, any>;
-};
-// the same thing, export type from ../binary-router when previous PR will be merged
-// TODO: export this type during refactor
-type TBinaryRoutes = {
-    is_logged_in: boolean;
-    is_logging_in: boolean;
-    passthrough: TPassthrough;
-};
+import type { TBinaryRoutes, TRoute } from 'src/Types';
 
 type TRouteWithSubRoutes = TRoute & TBinaryRoutes;
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { routes, makeLazyLoader, moduleLoader } from '@deriv/shared';
 import { Loading } from '@deriv/components';
 import { localize } from '@deriv/translations';
-import { Redirect } from 'react-router-dom';
+import type { TRoute } from 'src/Types';
 
 const Page404 = React.lazy(() => import(/* webpackChunkName: "404" */ 'Modules/Page404'));
 
@@ -10,18 +10,6 @@ const lazyLoadReportComponent = makeLazyLoader(
     () => moduleLoader(() => import(/* webpackChunkName: "reports-routes" */ '../Containers')),
     () => <Loading />
 );
-
-export type TRoute = {
-    path?: string;
-    component: React.ComponentType | typeof Redirect;
-    is_authenticated?: boolean;
-    getTitle: () => string;
-    icon_component?: string;
-    routes?: TRoute[];
-    default?: boolean;
-    to?: string;
-    exact?: boolean;
-};
 
 // Order matters
 const initRoutesConfig = (): TRoute[] => {

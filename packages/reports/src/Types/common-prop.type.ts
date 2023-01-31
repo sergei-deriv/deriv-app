@@ -42,3 +42,9 @@ export type TRoutes = {
     is_virtual?: boolean;
     passthrough?: TPassthrough;
 };
+
+export type TRouteConfig = TRoute & {
+    is_modal?: boolean;
+    is_authenticated?: boolean;
+    routes?: TRoute[];
+};

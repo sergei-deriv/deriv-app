@@ -1,4 +1,5 @@
-import type { GetAccountStatus, Authorize, DetailsOfEachMT5Loginid } from '@deriv/api-types';
+import type { Moment } from 'moment';
+import type { GetAccountStatus, Authorize, DetailsOfEachMT5Loginid, ProposalOpenContract } from '@deriv/api-types';
 import type { RouteComponentProps } from 'react-router';
 
 type TAccount = NonNullable<Authorize['account_list']>[0];
@@ -86,6 +87,7 @@ type TCommonStore = {
     platform: string;
     routeBackInApp: (history: Pick<RouteComponentProps, 'history'>, additional_platform_path?: string[]) => void;
     routeTo: (pathname: string) => void;
+    server_time: Moment;
 };
 
 type TUiStore = {
@@ -98,6 +100,30 @@ type TUiStore = {
     setCurrentFocus: (value: string) => void;
     toggleAccountsDialog: () => void;
     toggleCashier: () => void;
+    notification_messages_ui: string;
+    addToast: (obj: Record<string, string>) => void;
+    removeToast: (name: string) => void;
+    should_show_cancellation_warning: boolean;
+    toggleCancellationWarning: () => void;
+    toggleUnsupportedContractModal: () => void;
+};
+
+type TPortfolioStore = {
+    getContractById: (id: number) => ProposalOpenContract;
+    active_positions: ProposalOpenContract[];
+    error: TCommonStoreError;
+    getPositionById: (id: number) => ProposalOpenContract;
+    is_loading: boolean;
+    is_multiplier: boolean;
+    onClickCancel: () => void;
+    onClickSell: () => void;
+    onMount: () => void;
+    onClickRemove: () => void;
+    removePositionById: (id: number) => void;
+};
+
+type TContractStore = {
+    getContractById: (id: number) => ProposalOpenContract;
 };
 
 export type TRootStore = {
@@ -105,4 +131,6 @@ export type TRootStore = {
     common: TCommonStore;
     ui: TUiStore;
     modules: Record<string, any>;
+    portfolio: TPortfolioStore;
+    contract_trade: TContractStore;
 };

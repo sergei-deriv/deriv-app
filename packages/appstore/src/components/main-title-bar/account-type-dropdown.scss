@@ -12,7 +12,7 @@
         & > div.dc-dropdown {
             &-container {
                 min-width: 8.2rem;
-                width: 8.2rem;
+                width: fit-content;
             }
         }
 
@@ -39,7 +39,6 @@
     &--real:focus,
     &--real:hover {
         border: 1px solid var(--status-info);
-        width: 87%;
         & > .dc-text {
             color: var(--status-info);
         }
@@ -49,10 +48,8 @@
     &--demo:focus,
     &--demo:hover {
         border: 1px solid var(--status-success);
-        width: 90%;
         & > .dc-text {
             color: var(--status-success);
-            padding-left: 0.8em;
         }
     }
     &__icon {
@@ -62,11 +59,11 @@
         }
         &--real {
             --fill-color1: var(--status-info) !important;
-            right: 1.8rem;
+            right: 1rem;
         }
         &--demo {
             --fill-color1: var(--status-success) !important;
-            right: 1.5rem;
+            right: 1rem;
         }
     }
 }

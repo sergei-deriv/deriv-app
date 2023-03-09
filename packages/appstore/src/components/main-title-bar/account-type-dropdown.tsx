@@ -11,8 +11,8 @@ const AccountTypeDropdown = () => {
     const { selected_account_type, selectAccountType } = traders_hub;
     const { setPrevAccountType, preferred_language } = client;
 
-    const translated_account_types = React.useCallback(
-        getAccountTypes,
+    const translated_account_types = React.useMemo(
+        () => getAccountTypes(),
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [preferred_language]
     );

@@ -1,7 +1,6 @@
 import Joyride from 'react-joyride';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 import { Localize, localize } from '@deriv/translations';
 import {
     tour_step_config,
@@ -11,7 +10,7 @@ import {
     tour_step_config_high_risk,
 } from 'Constants/tour-steps-config';
 import { useStores } from 'Stores/index';
-import { routes, ContentFlag } from '@deriv/shared';
+import { ContentFlag } from '@deriv/shared';
 import { SpanButton } from '@deriv/components';
 import { useTradersHubTracking } from 'Hooks/index';
 
@@ -29,12 +28,34 @@ const TourGuide = () => {
     const { is_dark_mode_on, should_trigger_tour_guide, setShouldTriggerTourGuide } = ui;
     const { prev_account_type } = client;
 
-    const history = useHistory();
     const [joyride_index, setJoyrideIndex] = React.useState<number>(0);
     const tour_step_locale = getTourStepLocale();
     const high_risk_tour_step_locale = getTourStepLocale();
 
     const { trackLastStep, trackStepForward, trackOnboardingRestart } = useTradersHubTracking();
+
+    tour_step_locale.back = (
+        <div
+            onClick={() => {
+                setJoyrideIndex(prev => prev - 1);
+            }}
+        >
+            <Localize i18n_default_text='Back' />
+        </div>
+    );
+
+    if (joyride_index > 0) {
+        tour_step_locale.next = (
+            <div
+                onClick={() => {
+                    trackStepForward(7);
+                    setJoyrideIndex(prev => prev + 1);
+                }}
+            >
+                <Localize i18n_default_text='Next' />
+            </div>
+        );
+    }
 
     tour_step_locale.last = (
         <div
@@ -46,6 +67,7 @@ const TourGuide = () => {
                 if (should_trigger_tour_guide) {
                     setShouldTriggerTourGuide(false);
                 }
+                setJoyrideIndex(0);
             }}
         >
             <Localize i18n_default_text='OK' />
@@ -61,6 +83,7 @@ const TourGuide = () => {
                 if (should_trigger_tour_guide) {
                     setShouldTriggerTourGuide(false);
                 }
+                setJoyrideIndex(0);
             }}
         >
             <Localize i18n_default_text='OK' />
@@ -72,6 +95,7 @@ const TourGuide = () => {
             <div
                 onClick={() => {
                     trackStepForward(7);
+                    setJoyrideIndex(prev => prev + 1);
                 }}
             >
                 <Localize i18n_default_text='Next' />
@@ -82,6 +106,7 @@ const TourGuide = () => {
             <div
                 onClick={() => {
                     trackStepForward(7);
+                    setJoyrideIndex(prev => prev + 1);
                 }}
             >
                 <Localize i18n_default_text='Next' />
@@ -99,8 +124,8 @@ const TourGuide = () => {
                 onClick={() => {
                     trackOnboardingRestart();
                     setIsFirstTimeVisit(false);
-                    history.push(routes.onboarding);
                     toggleIsTourOpen(true);
+                    setJoyrideIndex(0);
                 }}
             />
         );
@@ -115,8 +140,8 @@ const TourGuide = () => {
             onClick={() => {
                 trackOnboardingRestart();
                 setIsFirstTimeVisit(false);
-                history.push(routes.onboarding);
                 toggleIsTourOpen(true);
+                setJoyrideIndex(0);
             }}
         />
     );
@@ -136,7 +161,7 @@ const TourGuide = () => {
             floaterProps={{
                 disableAnimation: true,
             }}
-            callback={data => setJoyrideIndex(data.index)}
+            stepIndex={joyride_index}
         />
     );
 };

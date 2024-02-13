@@ -32,11 +32,12 @@ const TourGuide = () => {
     const tour_step_locale = getTourStepLocale();
     const high_risk_tour_step_locale = getTourStepLocale();
 
-    const { trackLastStep, trackStepForward, trackOnboardingRestart } = useTradersHubTracking();
+    const { trackLastStep, trackStepBack, trackStepForward, trackOnboardingRestart } = useTradersHubTracking();
 
     tour_step_locale.back = (
         <div
             onClick={() => {
+                trackStepBack(joyride_index - 1);
                 setJoyrideIndex(prev => prev - 1);
             }}
         >

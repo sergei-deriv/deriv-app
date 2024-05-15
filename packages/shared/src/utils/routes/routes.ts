@@ -87,11 +87,11 @@ export const routes = {
     cashier_v2: '/cashier-v2',
 
     //wallets
-    wallets: 'wallet',
-    wallets_transfer: '/wallet/account-transfer',
+    wallets: '/wallet',
     wallets_deposit: '/wallet/deposit',
-    wallets_onramp: '/wallet/on-ramp',
-    wallets_reset_balance: '/wallet/reset-balance',
     wallets_withdraw: '/wallet/withdraw',
-    wallets_transactions: '/cashier/transactions',
+    wallets_transfer: '/wallet/account-transfer',
+    wallets_onramp: '/wallet/on-ramp',
+    wallets_transactions: '/wallet/transactions',
+    wallets_reset_balance: '/wallet/reset-balance',
 };

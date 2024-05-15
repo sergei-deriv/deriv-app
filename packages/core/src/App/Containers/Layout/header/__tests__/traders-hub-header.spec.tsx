@@ -6,7 +6,6 @@ import { TStores } from '@deriv/stores/types';
 
 jest.mock('react-router', () => ({
     ...jest.requireActual('react-router'),
-    useHistory: () => ({ history: {} }),
     useLocation: () => ({ pathname: '/' }),
 }));
 jest.mock('@deriv/components', () => {
@@ -26,11 +25,6 @@ jest.mock('App/Components/Layout/Header/toggle-menu-drawer.jsx', () => jest.fn((
 jest.mock('Assets/SvgComponents/header/deriv-rebranding-logo.svg', () => jest.fn(() => 'MockedDerivBrandLogo'));
 jest.mock('../../../CurrencySelectionModal', () => jest.fn(() => <div>MockedCurrencySelectionModal</div>));
 jest.mock('../show-notifications', () => jest.fn(() => <div>MockedShowNotifications</div>));
-
-jest.mock('@deriv/hooks', () => ({
-    useIsRealAccountNeededForCashier: () => false,
-    useHasSetCurrency: () => true,
-}));
 
 describe('TradersHubHeader', () => {
     const renderComponent = (mock_store?: TStores) =>
